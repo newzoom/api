@@ -1,0 +1,11 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_DB: newzoom
+    container_name: newzoom_db
+    ports:
+      - 15432:5432
