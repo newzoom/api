@@ -6,6 +6,8 @@ import (
 	"github.com/phuwn/tools/db"
 	"github.com/phuwn/tools/handler"
 	mw "github.com/phuwn/tools/middleware"
+
+	"github.com/newzoom/api/pkg/middleware"
 )
 
 // JSON - shorcut for handler.JSON function
@@ -19,8 +21,10 @@ func Router() *echo.Echo {
 	{
 		r.Use(mw.CorsConfig())
 		r.Use(mw.AddTransaction)
+		r.Use(middleware.WithAuth)
 	}
 
+	r.Static("/page", "assets")
 	r.GET("/healthz", healthz)
 	{
 		userRoutes(r)

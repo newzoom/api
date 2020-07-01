@@ -1,2 +1,2 @@
 INSERT INTO "public"."conference_users" ("user_id", "conference_id", "created_at", "updated_at", "deleted_at") VALUES
-('1', '1', '2020-06-28 07:42:55.710008+00', NULL, NULL);
+('520a4f1c-d7a0-4019-8f63-7c8658c43533', '6e3387c5-2a7c-4143-b9c4-eb70a6f16bae', '2020-07-01 08:58:59.459557+00', NULL, NULL);

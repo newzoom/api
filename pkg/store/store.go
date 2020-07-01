@@ -5,7 +5,7 @@ import (
 	"github.com/newzoom/api/pkg/store/user"
 )
 
-// Store - server store struct
+// Store - database handling implementation
 type Store struct {
 	User       user.Store
 	Conference conference.Store

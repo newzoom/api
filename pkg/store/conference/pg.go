@@ -15,7 +15,7 @@ func NewStore() Store {
 	return &conferencePGStore{}
 }
 
-func (s conferencePGStore) Get(c echo.Context, id string) (*model.Conference, error) {
+func (s conferencePGStore) Get(c echo.Context, id int) (*model.Conference, error) {
 	tx := db.GetTxFromCtx(c)
 	var res model.Conference
 	return &res, tx.Where("id = ?", id).First(&res).Error

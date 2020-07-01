@@ -3,6 +3,6 @@ package model
 // Conference data model
 type Conference struct {
 	Base
-	ID   int    `json:"id"`
+	ID   string `json:"id"`
 	Name string `json:"name"`
 }
