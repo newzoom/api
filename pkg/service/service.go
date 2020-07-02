@@ -1,6 +1,6 @@
 package service
 
-import "github.com/newzoom/api/pkg/server/service/google"
+import "github.com/newzoom/api/pkg/service/google"
 
 // Service - 3rd parties service handling implementation
 type Service struct {

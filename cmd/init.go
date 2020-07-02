@@ -7,7 +7,7 @@ import (
 	"github.com/phuwn/tools/util"
 
 	"github.com/newzoom/api/pkg/server"
-	"github.com/newzoom/api/pkg/server/service"
+	"github.com/newzoom/api/pkg/service"
 	"github.com/newzoom/api/pkg/store"
 )
 

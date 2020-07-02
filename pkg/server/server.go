@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/newzoom/api/pkg/server/service"
+	"github.com/newzoom/api/pkg/service"
 	"github.com/newzoom/api/pkg/store"
 )
 
