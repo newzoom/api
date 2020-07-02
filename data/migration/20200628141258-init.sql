@@ -19,7 +19,11 @@ create table conferences (
 	created_at timestamp(6) with time zone default now(),
 	updated_at timestamp(6) with time zone,
 	deleted_at timestamp(6) with time zone,
-	name varchar(255)
+	topic varchar(255) not null,
+	description text,
+	host_id uuid references users (id) not null,
+	is_active boolean not null,
+	password text
 );
 
 create table conference_users (
@@ -35,3 +39,4 @@ create table conference_users (
 drop table conference_users;
 drop table conferences;
 drop table users;
+drop function gen_random_uuid;

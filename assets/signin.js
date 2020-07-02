@@ -21,7 +21,6 @@ $(document).ready(function () {
         data: authResult["code"],
         success: function ({ data }) {
           console.log("sign in successfully");
-          console.log(data);
           var { id, email, name, avatar, access_token } = data;
           document.cookie = `access_token=${access_token};`;
           document.cookie = `uid=${id};`;

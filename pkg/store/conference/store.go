@@ -8,6 +8,6 @@ import (
 
 // Store - conference store interface
 type Store interface {
-	Get(c echo.Context, id int) (*model.Conference, error)
+	Get(c echo.Context, id string) (*model.Conference, error)
 	Create(c echo.Context, conference *model.Conference) error
 }

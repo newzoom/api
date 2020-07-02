@@ -9,11 +9,11 @@ import (
 // User data model
 type User struct {
 	Base
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Email       string `json:"email"`
-	Avatar      string `json:"avatar"`
-	AccessToken string `json:"access_token" sql:"-"`
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Email       string  `json:"email"`
+	Avatar      string  `json:"avatar"`
+	AccessToken *string `json:"access_token,omitempty" sql:"-"`
 }
 
 const (

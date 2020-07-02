@@ -1,2 +1,2 @@
-INSERT INTO "public"."conferences" ("id", "created_at", "updated_at", "deleted_at", "name") VALUES
-('6e3387c5-2a7c-4143-b9c4-eb70a6f16bae', '2020-06-29 09:43:13.1337+00', NULL, NULL, 'conference_1');
+INSERT INTO "public"."conferences" ("id", "created_at", "updated_at", "deleted_at", "topic", "description", "password", "host_id", "is_active") VALUES
+('1feab46b-4113-4938-8e8f-75ec203e47d2', '2020-07-02 06:19:46.130753+00', NULL, NULL, 'conference 1', NULL, NULL, '520a4f1c-d7a0-4019-8f63-7c8658c43533', 'FALSE');

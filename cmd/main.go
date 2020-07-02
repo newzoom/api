@@ -17,7 +17,7 @@ func main() {
 
 	addr := ":8080"
 	log.Status("listening on port%s", addr)
-	go ws.NewHub()
+	go ws.NewServer()
 
 	err := http.ListenAndServe(addr, handler.Router())
 	if err != nil {

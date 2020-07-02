@@ -17,29 +17,17 @@
       async
       defer
     ></script>
-    <!-- <link rel="stylesheet" media="all" href="signin.css" /> -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"
-    />
-
+    <link rel="stylesheet" media="all" href="signin.css" />
     <script src="signin.js"></script>
   </head>
   <body>
-    <div
-      id="customBtn"
-      class="oauth-container btn darken-4 white black-text"
-      style="text-transform: none;"
-    >
-      <div class="left">
-        <img
-          width="20px"
-          style="margin-top: 7px; margin-right: 8px;"
-          alt="Google sign-in"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-        />
-      </div>
-      Login with Google
+    <div id="customBtn" class="login-button">
+      <img
+        alt="Google sign-in"
+        class="login-logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+      />
+      <span class="login-text">Login with Google</span>
     </div>
     <div id="name"></div>
     <a href="#" onclick="signOut();">Sign out</a>

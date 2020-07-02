@@ -25,3 +25,9 @@ func (s userPGStore) GetByEmail(c echo.Context, email string) (*model.User, erro
 	u := &model.User{}
 	return u, tx.Where("email = ?", email).First(u).Error
 }
+
+func (s userPGStore) Get(c echo.Context, id string) (*model.User, error) {
+	tx := db.GetTxFromCtx(c)
+	u := &model.User{}
+	return u, tx.Where("id = ?", id).First(u).Error
+}

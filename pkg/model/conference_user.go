@@ -6,6 +6,6 @@ type ConferenceUser struct {
 	UserID       string `json:"user_id"`
 	ConferenceID string `json:"conference_id"`
 
-	Users      []*User     `json:"users" sql:"-"`
-	Conference *Conference `json:"conference" sql:"-"`
+	User       *User       `json:"-" gorm:"foreignkey:ID;association_foreignkey:UserID"`
+	Conference *Conference `json:"-" gorm:"foreignkey:ID;association_foreignkey:ConferenceID"`
 }
