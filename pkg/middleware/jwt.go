@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/labstack/echo"
@@ -9,26 +10,25 @@ import (
 	"github.com/newzoom/api/pkg/model"
 )
 
-var noAuthPath = []string{
-	"/page",
-	"/healthz",
-	"/auth",
+var authPath = []string{
+	"/conferences",
+	"/ws",
 }
 
 func shouldAuth(c echo.Context) bool {
 	requestURL := c.Request().RequestURI
-	for _, v := range noAuthPath {
+	for _, v := range authPath {
 		if strings.Contains(requestURL, v) {
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func authenticate(c echo.Context) error {
-	token, err := model.GetTokenFromRequest(c)
-	if err != nil {
-		return err
+	token := c.QueryParam("token")
+	if token == "" {
+		return errors.Customize(401, "missing access_token", fmt.Errorf("empty access_token"))
 	}
 	uid, err := model.VerifyUserSession(token)
 	if err != nil {

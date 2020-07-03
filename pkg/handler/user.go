@@ -47,6 +47,5 @@ func signIn(c echo.Context) error {
 	}
 
 	u.AccessToken = &jwt
-
 	return JSON(c, 200, u)
 }

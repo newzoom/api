@@ -33,6 +33,7 @@ func (c *Client) readPump() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				// handle unexpected close error
 			}
+			c.hub.broadcast <- &Message{leaveMessage, []byte{}, c}
 			break
 		}
 		c.hub.broadcast <- &Message{normalMessage, message, c}

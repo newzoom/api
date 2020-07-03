@@ -24,11 +24,12 @@ func Router() *echo.Echo {
 		r.Use(middleware.WithAuth)
 	}
 
-	r.Static("/page", "assets")
+	r.Static("/", "assets")
 	r.GET("/healthz", healthz)
 	{
 		userRoutes(r)
 		conferenceRoutes(r)
+		wsRoutes(r)
 	}
 
 	return r

@@ -13,6 +13,8 @@ window.onload = function () {
   }
   let queue = [];
   let sourceBuffer;
+  let buffer;
+  let b;
   let ranges;
   const inputVid = document.querySelector("#input-vid");
   const outputVid = document.querySelector("#output-vid");
@@ -26,7 +28,17 @@ window.onload = function () {
       !sourceBuffer.updating &&
       queue.length > 0
     ) {
-      sourceBuffer.appendBuffer(queue.shift());
+      buffer = queue.shift();
+      b = new Int8Array(buffer.slice(0, 37));
+      var res = "";
+      var i;
+      for (i = 1; i < b.length; i++) {
+        res += String.fromCharCode(b[i]);
+      }
+      console.log(b[0], res);
+      if (b[0] == 0) {
+        sourceBuffer.appendBuffer(buffer.slice(37, buffer.byteLength));
+      }
     }
 
     // Limit the total buffer size to 20 minutes
@@ -49,16 +61,10 @@ window.onload = function () {
     sourceBuffer.onerror = (e) => {
       console.log("buffer error");
     };
-    sourceBuffer.onupdatestart = (e) => {
-      console.log("update start", sourceBuffer.buffered.length);
-    };
-    sourceBuffer.onupdateend = (e) => {
-      console.log("update end", sourceBuffer.buffered.length);
-    };
     sourceBuffer.onupdate = (e) => {
       console.log("updated", sourceBuffer.buffered.length);
-      if (st == undefined) {
-        st = Date.now();
+      if (outputVid.paused) {
+        outputVid.play();
       }
       appendItemToBuffer();
     };
@@ -99,8 +105,11 @@ window.onload = function () {
       });
   };
 
+  let sliced;
+  let conID = "04a8506e-4e9d-47e5-9410-223df26ac689";
   if (window["WebSocket"]) {
-    ws = new WebSocket("ws://localhost:8080/ws");
+    var uri = `ws://${document.location.host}/ws/${conID}?token=${u.access_token}`;
+    ws = new WebSocket(encodeURI(uri));
     ws.binaryType = "arraybuffer";
 
     ws.onclose = (e) => {

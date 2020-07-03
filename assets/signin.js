@@ -7,6 +7,10 @@ $(document).ajaxStop(function () {
 });
 
 $(document).ready(function () {
+  if (!displaySignIn) {
+    $("#customBtn")[0].style.display = "none";
+    $("#name")[0].innerText = "Signed in: " + u.name;
+  }
   function signInCallback(authResult) {
     if (authResult["code"]) {
       $("#customBtn")[0].style.display = "none";
@@ -21,13 +25,9 @@ $(document).ready(function () {
         data: authResult["code"],
         success: function ({ data }) {
           console.log("sign in successfully");
-          var { id, email, name, avatar, access_token } = data;
-          document.cookie = `access_token=${access_token};`;
-          document.cookie = `uid=${id};`;
-          document.cookie = `email=${email};`;
-          document.cookie = `avatar=${avatar};`;
-          document.cookie = `name=${name};`;
-          $("#name")[0].innerText = "Signed in: " + name;
+          u = data;
+          localStorage.setItem("user", JSON.stringify(data));
+          $("#name")[0].innerText = "Signed in: " + u.name;
         },
       });
     } else {
