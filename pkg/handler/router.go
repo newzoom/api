@@ -29,6 +29,7 @@ func Router() *echo.Echo {
 	{
 		userRoutes(r)
 		conferenceRoutes(r)
+		wsRoutes(r)
 	}
 
 	return r

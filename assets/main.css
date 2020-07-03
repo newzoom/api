@@ -1,0 +1,31 @@
+*{
+    list-style: none;
+    padding: 0;
+}
+.header{
+    height: 100px;
+    background-color: #787878;
+}
+hr{
+    margin-bottom: 10px ;
+}
+.nav-menu{
+    background-color: #F2F2F2;
+    height: 100vh;
+    padding-right: 0;
+}
+.nav-menu .title{
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 16px;
+    z-index: 0;
+}
+.padding-top{
+    padding-top: 20px;
+}
+.fa-eye{
+    cursor: pointer;
+}
+.active{
+    background-color: #D8D8D8;
+}

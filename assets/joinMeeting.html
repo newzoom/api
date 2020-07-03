@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create video call</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- ... -->
+    <script
+      type="text/javascript"
+      src="./bower_components/moment/min/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="./bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="./bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
+    />
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div class="header"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2 nav-menu">
+          <ul class="nav flex-column">
+            <p class="title">Metting</p>
+            <li class="nav-item">
+              <a class="nav-link active" href="joinMeeting.html">Join</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="addMeeting.html">Add Metting</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10 padding-top">
+          <form class="form-horizontal" action="">
+            <div class="form-group">
+              <label class="control-label col-md-2">Metting ID:</label>
+              <div class="col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter topic ID"
+                  name="pwd"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">Password:</label>
+              <div class="col-md-6">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter metting password"
+                  name="pwd"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3"></div>
+              <div class="col-md-9">
+                <button type="submit" class="btn btn-primary">Join</button> |
+                <button type="submit" class="btn btn-default">Cancel</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

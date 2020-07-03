@@ -29,6 +29,7 @@ func (s *Server) run() {
 		select {
 		case hub := <-s.register:
 			s.hubs[hub.id] = hub
+			go hub.run()
 		case id := <-s.unregister:
 			if hub, ok := s.hubs[id]; ok {
 				hub.terminate <- true

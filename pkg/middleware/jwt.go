@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/labstack/echo"
@@ -26,9 +27,9 @@ func shouldAuth(c echo.Context) bool {
 }
 
 func authenticate(c echo.Context) error {
-	token, err := model.GetTokenFromRequest(c)
-	if err != nil {
-		return err
+	token := c.QueryParam("token")
+	if token == "" {
+		return errors.Customize(401, "missing access_token", fmt.Errorf("empty access_token"))
 	}
 	uid, err := model.VerifyUserSession(token)
 	if err != nil {

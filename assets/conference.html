@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <title>Video Conference</title>
+    <script src="main.js"></script>
   </head>
   <body>
     <h1>Video Conference DEMO</h1>
     <div>
       <video class="videostream" autoplay="" id="input-vid"></video>
-      <video class="videostream" autoplay="" id="output-vid"></video>
+      <video
+        class="videostream"
+        autoplay=""
+        id="output-vid"
+        muted="muted"
+      ></video>
       <p><button class="capture-button">Capture video</button></p>
     </div>
     <script src="conference.js"></script>
