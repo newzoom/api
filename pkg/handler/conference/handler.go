@@ -27,7 +27,7 @@ func Create(c echo.Context, con *model.Conference) error {
 // Join - middleman layer to join a conference
 func Join(c echo.Context, conID, userID, password string) (*model.Conference, error) {
 	cfg := server.GetServerCfg()
-	con, err := cfg.Store().Conference.Get(c, conID)
+	con, err := cfg.Store().Conference.Get(c, conID, true)
 	if err != nil {
 		return nil, errors.Customize(404, "invalid conference", err)
 	}
@@ -65,11 +65,22 @@ func IsMember(c echo.Context, conID, userID string) (bool, error) {
 }
 
 // Get - middleman layer to get conference data
-func Get(c echo.Context, id string) (*model.Conference, error) {
+func Get(c echo.Context, id string, preload bool) (*model.Conference, error) {
 	cfg := server.GetServerCfg()
-	con, err := cfg.Store().Conference.Get(c, id)
+	con, err := cfg.Store().Conference.Get(c, id, preload)
 	if err != nil {
-		return nil, errors.Customize(500, "can't get conference data", err)
+		if errors.IsRecordNotFound(err) {
+			return nil, errors.Customize(404, "invalid conference", err)
+		}
+		return nil, errors.Customize(500, "unknown error", err)
 	}
+
+	if len(con.ConferenceUsers) != 0 {
+		con.Users = make([]*model.User, len(con.ConferenceUsers))
+		for i, v := range con.ConferenceUsers {
+			con.Users[i] = v.User
+		}
+	}
+
 	return con, nil
 }

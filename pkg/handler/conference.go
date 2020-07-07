@@ -18,7 +18,8 @@ func conferenceRoutes(r *echo.Echo) {
 	g := r.Group("/conferences")
 	{
 		g.POST("", createConference)
-		g.POST("/join", joinConference)
+		g.POST("/join/:id", joinConference)
+		g.GET("/:id", getConference)
 	}
 }
 
@@ -68,7 +69,6 @@ func createConference(c echo.Context) error {
 
 // JoinConferenceRequest - data form to join a conference
 type JoinConferenceRequest struct {
-	ID       string `json:"id"`
 	Password string `json:"password"`
 }
 
@@ -77,6 +77,8 @@ func joinConference(c echo.Context) error {
 	if userID == "" {
 		return errors.New("failed to get user id")
 	}
+
+	conID := c.Param("id")
 
 	b, err := ioutil.ReadAll(c.Request().Body)
 	if err != nil {
@@ -94,22 +96,45 @@ func joinConference(c echo.Context) error {
 		password = fmt.Sprintf("%x", md5.Sum([]byte(reqData.Password)))
 	}
 
-	isMember, err := conference.IsMember(c, reqData.ID, userID)
+	isMember, err := conference.IsMember(c, conID, userID)
 	if err != nil {
 		return err
 	}
 	if isMember {
-		con, err := conference.Get(c, reqData.ID)
+		con, err := conference.Get(c, conID, true)
 		if err != nil {
 			return err
 		}
 		return JSON(c, 200, con)
 	}
 
-	con, err := conference.Join(c, reqData.ID, userID, password)
+	con, err := conference.Join(c, conID, userID, password)
 	if err != nil {
 		return err
 	}
 
+	return JSON(c, 200, con)
+}
+
+func getConference(c echo.Context) error {
+	userID := model.GetUserIDFromCtx(c)
+	if userID == "" {
+		return errors.New("failed to get user id")
+	}
+	cid := c.Param("id")
+	con, err := conference.Get(c, cid, false)
+	if err != nil {
+		return err
+	}
+	isMember, err := conference.IsMember(c, cid, userID)
+	if err != nil {
+		return err
+	}
+	if isMember {
+		return JSON(c, 200, con)
+	}
+	if con.Password != "" {
+		con.HavePassword = true
+	}
 	return JSON(c, 200, con)
 }

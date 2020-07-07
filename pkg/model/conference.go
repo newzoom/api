@@ -10,6 +10,7 @@ type Conference struct {
 	HostID      string `json:"host_id"`
 	IsActive    bool   `json:"is_active"`
 
+	HavePassword    bool              `json:"have_password" sql:"-"`
 	Users           []*User           `json:"users,omitempty" sql:"-"`
 	ConferenceUsers []*ConferenceUser `json:"-" gorm:"foreignkey:ConferenceID;association_foreignkey:ID"`
 }
