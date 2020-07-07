@@ -7,6 +7,7 @@ import (
 	"github.com/phuwn/tools/util"
 
 	"github.com/newzoom/api/pkg/server"
+	"github.com/newzoom/api/pkg/service"
 	"github.com/newzoom/api/pkg/store"
 )
 
@@ -21,5 +22,6 @@ func init() {
 	}
 
 	store := store.New()
-	server.NewServerCfg(store)
+	service := service.New()
+	server.NewServerCfg(store, service)
 }
