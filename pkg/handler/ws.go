@@ -11,7 +11,7 @@ import (
 )
 
 func wsRoutes(r *echo.Echo) {
-	r.GET("/ws/:id", serveWs)
+	r.GET("/ws", serveWs)
 }
 
 func serveWs(c echo.Context) error {
@@ -20,7 +20,7 @@ func serveWs(c echo.Context) error {
 		return errors.New("failed to get user id")
 	}
 
-	conID := c.Param("id")
+	conID := c.QueryParam("id_room")
 
 	isMember, err := conference.IsMember(c, conID, userID)
 	if err != nil {

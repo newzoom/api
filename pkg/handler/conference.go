@@ -10,7 +10,6 @@ import (
 	"github.com/phuwn/tools/errors"
 
 	"github.com/newzoom/api/pkg/handler/conference"
-	"github.com/newzoom/api/pkg/handler/ws"
 	"github.com/newzoom/api/pkg/model"
 )
 
@@ -62,7 +61,6 @@ func createConference(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	ws.NewHub(con.ID)
 
 	return JSON(c, 201, con)
 }
