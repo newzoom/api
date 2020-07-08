@@ -15,10 +15,14 @@ func NewStore() Store {
 	return &conferencePGStore{}
 }
 
-func (s conferencePGStore) Get(c echo.Context, id string) (*model.Conference, error) {
+func (s conferencePGStore) Get(c echo.Context, id string, preload bool) (*model.Conference, error) {
 	tx := db.GetTxFromCtx(c)
 	var res model.Conference
-	return &res, tx.Where("id = ?", id).First(&res).Error
+	tx = tx.Where("id = ?", id)
+	if preload {
+		tx = tx.Preload("ConferenceUsers").Preload("ConferenceUsers.User")
+	}
+	return &res, tx.First(&res).Error
 }
 
 func (s conferencePGStore) Create(c echo.Context, conference *model.Conference) error {

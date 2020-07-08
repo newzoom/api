@@ -1,2 +1,3 @@
-INSERT INTO "public"."users" ("id", "created_at", "updated_at", "deleted_at", "name", "email") VALUES
-('1', '2020-06-28 07:33:27.50211+00', NULL, NULL, 'Phuong Tran', 'phuwn29@gmail.com');
+INSERT INTO "public"."users" ("id", "created_at", "updated_at", "deleted_at", "name", "email", "avatar") VALUES
+('520a4f1c-d7a0-4019-8f63-7c8658c43533', '2020-07-01 08:57:59.38504+00', '2020-07-01 08:57:59.38504+00', NULL, 'Phuong Tran', 'phuwn29@gmail.com', 'https://lh3.googleusercontent.com/a-/AOh14GgI0Pyg1C_iS61SJ8t2knj-X-3e6xz5vfpKrs2f=s100'),
+('797ef2eb-cefa-4582-8706-e5c240357983', '2020-06-30 07:59:55.146817+00', NULL, NULL, 'Trung Tran', 'namtrung17101998@gmail.com', NULL);

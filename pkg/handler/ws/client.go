@@ -1,11 +1,13 @@
 package ws
 
 import (
-	"net/http"
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/phuwn/tools/log"
+	"github.com/labstack/echo"
+	"github.com/phuwn/tools/errors"
 )
 
 const (
@@ -22,41 +24,22 @@ const (
 	maxMessageSize = 512
 )
 
-var (
-	newline = []byte{'\n'}
-	space   = []byte{' '}
-)
-
-// CheckOrigin returns true if the request's origin is in allowed list
-func CheckOrigin(r *http.Request) bool {
-	// log.Info("????")
-	// origin := r.Header["Origin"]
-	// if len(origin) == 0 {
-	// 	return true
-	// }
-	// u, err := url.Parse(origin[0])
-	// if err != nil {
-	// 	return false
-	// }
-	// return equalASCIIFold(u.Host, r.Host)
-	return true
-}
-
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-	CheckOrigin:     CheckOrigin,
 }
 
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
-	hub *Hub
+	id string
+
+	conID string
 
 	// The websocket connection.
 	conn *websocket.Conn
 
 	// Buffered channel of outbound messages.
-	send chan *Message
+	send chan []byte
 }
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -66,23 +49,33 @@ type Client struct {
 // reads from this goroutine.
 func (c *Client) readPump() {
 	defer func() {
-		c.hub.unregister <- c
+		hub.broadcast <- &Message{Typ: leaveMsg, SenderID: c.id, client: c}
+		hub.unregister <- c
 		c.conn.Close()
 	}()
 	// c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		mt, message, err := c.conn.ReadMessage()
+		_, raw, err := c.conn.ReadMessage()
 		if err != nil {
-			log.Error(err)
+			fmt.Println("failed to read message", err)
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				// handle unexpected close error
 			}
+			hub.broadcast <- &Message{Typ: leaveMsg, SenderID: c.id, client: c}
 			break
 		}
+
 		// message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		c.hub.broadcast <- &Message{mt, message, c}
+		msg := &Message{client: c}
+		err = json.Unmarshal(raw, msg)
+		if err != nil {
+			fmt.Println("failed to parse msg", string(raw))
+			continue
+		}
+		msg.SenderID = c.id
+		hub.broadcast <- msg
 	}
 }
 
@@ -107,20 +100,13 @@ func (c *Client) writePump() {
 				return
 			}
 
-			w, err := c.conn.NextWriter(message.messageType)
+			w, err := c.conn.NextWriter(websocket.TextMessage)
 			if err != nil {
-				log.Error(err)
-				return
+				fmt.Println("failed to create writer", string(message))
+				continue
 			}
-			w.Write(message.data)
 
-			// Add queued chat messages to the current websocket message.
-			for i := 0; i < len(c.send); i++ {
-				if message.messageType == websocket.TextMessage {
-					w.Write(newline)
-				}
-				w.Write((<-c.send).data)
-			}
+			w.Write(message)
 
 			if err := w.Close(); err != nil {
 				return
@@ -135,17 +121,21 @@ func (c *Client) writePump() {
 }
 
 // Serve handles websocket requests from the peer.
-func Serve(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
+func Serve(c echo.Context, conID, userID string) error {
+	conn, err := upgrader.Upgrade(c.Response().Writer, c.Request(), nil)
 	if err != nil {
-		log.Error(err)
-		return
+		return errors.Customize(500, "failed to upgrade connection", err)
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan *Message, 256)}
-	client.hub.register <- client
+	if con, ok := hub.conferences[conID]; ok && con[userID] != nil {
+		return errors.Customize(400, "you've already joined this conference on a different browser please end the current session first", fmt.Errorf("session is in used"))
+	}
+	client := &Client{userID, conID, conn, make(chan []byte, 256)}
+	hub.register <- client
+	hub.broadcast <- &Message{Typ: welcomeMsg, SenderID: userID, client: client}
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.writePump()
 	go client.readPump()
+	return nil
 }

@@ -3,6 +3,14 @@ package model
 // Conference data model
 type Conference struct {
 	Base
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID          string `json:"id"`
+	Topic       string `json:"topic"`
+	Description string `json:"description"`
+	Password    string `json:"-"`
+	HostID      string `json:"host_id"`
+	IsActive    bool   `json:"is_active"`
+
+	HavePassword    bool              `json:"have_password" sql:"-"`
+	Users           []*User           `json:"users,omitempty" sql:"-"`
+	ConferenceUsers []*ConferenceUser `json:"-" gorm:"foreignkey:ConferenceID;association_foreignkey:ID"`
 }
