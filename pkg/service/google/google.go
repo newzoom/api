@@ -12,7 +12,7 @@ import (
 
 // Service - Google service implementation
 type Service interface {
-	GetOauth2Token(code string) (*oauth2.Token, error)
+	GetOauth2Token(code, redirectURL string) (*oauth2.Token, error)
 	GetUserGoogleInfo(token *oauth2.Token) (*model.User, error)
 }
 
@@ -28,13 +28,13 @@ func NewService() Service {
 			ClientSecret: util.Getenv("GOOGLE_CLIENT_SECRET", ""),
 			Endpoint:     google.Endpoint,
 			Scopes:       []string{"profile", "email"},
-			RedirectURL:  "http://localhost:8080",
 		},
 	}
 }
 
 // GetAccessToken - exchange user's code for access_token
-func (g *googleService) GetOauth2Token(code string) (*oauth2.Token, error) {
+func (g *googleService) GetOauth2Token(code, redirectURL string) (*oauth2.Token, error) {
+	g.config.RedirectURL = redirectURL
 	token, err := g.config.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		return nil, errors.Customize(400, "invalid auth code", err)

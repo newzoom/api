@@ -5,6 +5,13 @@ POSTGRES_CONTAINER?=newzoom_db
 dev:
 	@GO111MODULE=on RUN_MODE=local go run cmd/*.go
 
+build:
+	cp -r $(GOPATH)/src/github.com/newzoom/websdk ./bin/assets
+	@GO111MODULE=on GOOS=linux GOARCH=amd64 go build -o bin/server cmd/*.go
+	docker build --rm -t phuwn29/newzoom .
+	rm -rf ./bin/assets
+	rm ./bin/server
+
 test:
 	go test -p 1 ./pkg/...
 

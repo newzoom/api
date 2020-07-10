@@ -19,9 +19,9 @@ func createUser(c echo.Context, u *model.User) error {
 }
 
 // VerifyGoogleUser - verify user's google auth code, response google info of user
-func VerifyGoogleUser(c echo.Context, code string) (*model.User, error) {
+func VerifyGoogleUser(c echo.Context, code, redirectURL string) (*model.User, error) {
 	cfg := server.GetServerCfg()
-	token, err := cfg.Service().Google.GetOauth2Token(code)
+	token, err := cfg.Service().Google.GetOauth2Token(code, redirectURL)
 	if err != nil {
 		return nil, err
 	}

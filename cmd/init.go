@@ -14,7 +14,7 @@ import (
 // init server stuff
 func init() {
 	env := util.Getenv("RUN_MODE", "")
-	if env == "local" || env == "" {
+	if env == "local" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatalf("Error loading .env file: %v", err)

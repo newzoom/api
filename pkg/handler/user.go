@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"time"
 
@@ -18,10 +19,10 @@ func userRoutes(r *echo.Echo) {
 	// }
 }
 
-// NewUserRequest - data form to create new user
-type NewUserRequest struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
+// SignInRequest - data form to sign in to auth
+type SignInRequest struct {
+	Code        string `json:"code"`
+	RedirectURL string `json:"redirect_url"`
 }
 
 func signIn(c echo.Context) error {
@@ -29,9 +30,14 @@ func signIn(c echo.Context) error {
 	if err != nil {
 		return errors.Customize(400, "unable to read the request body", err)
 	}
-	code := string(b)
 
-	u, err := user.VerifyGoogleUser(c, code)
+	req := &SignInRequest{}
+	err = json.Unmarshal(b, req)
+	if err != nil {
+		return errors.Customize(400, "wrong sign in data form", err)
+	}
+
+	u, err := user.VerifyGoogleUser(c, req.Code, req.RedirectURL)
 	if err != nil {
 		return err
 	}
